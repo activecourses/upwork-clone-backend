@@ -21,3 +21,9 @@ Upwork Clone: A platform connecting freelancers and clients for job postings, pr
    POSTGRES_DB=<database-name>
     ```
     Replace `<username>`, `<password>`, and `<database-name>` with the values you used when creating the PostgreSQL container.
+
+### Flyway
+Flyway is used to manage database migrations. The SQL scripts are located in `src/main/resources/db/migration`.
+When you run the application, Flyway will automatically create the necessary tables in the database.
+#### To-Do
+- [ ] Add some data to the tables for testing purposes.
