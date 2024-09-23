@@ -1,0 +1,10 @@
+spring:
+    application:
+        name: upwork
+    profiles:
+        active: dev
+debug: true
+logging:
+    level:
+        org.springframework.boot.autoconfigure: ERROR
+        org.springframework.core: ERROR

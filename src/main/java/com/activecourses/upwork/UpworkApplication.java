@@ -1,13 +1,13 @@
-package com.upwork.clone.backend;
+package com.activecourses.upwork;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendApplication {
+public class UpworkApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
+		SpringApplication.run(UpworkApplication.class, args);
 	}
 
 }
