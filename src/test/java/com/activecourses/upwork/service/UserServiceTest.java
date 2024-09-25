@@ -44,7 +44,6 @@ class UserServiceTest {
         when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail("am0103738@gmail.com")).thenReturn(Optional.of(user));
-
         userService.registerUser(user);
 
         verify(userRepository, times(1)).save(user);
