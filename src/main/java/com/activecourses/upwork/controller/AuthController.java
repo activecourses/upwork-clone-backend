@@ -37,9 +37,11 @@ public class AuthController {
                             .builder()
                             .status(HttpStatus.UNAUTHORIZED)
                             .success(false)
+                            .error("email or password is incorrect")
                             .build()
                     );
         }
+
     }
 
 }
