@@ -27,3 +27,4 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
 When you run the application, Flyway will automatically create the necessary tables in the database.
 #### To-Do
 - [ ] Add some data to the tables for testing purposes.
+
