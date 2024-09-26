@@ -1,8 +1,5 @@
 package com.activecourses.upwork.security;
 
-import com.activecourses.upwork.model.User;
-import com.activecourses.upwork.repository.UserRepository;
-import com.activecourses.upwork.service.CustomeUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
