@@ -59,6 +59,8 @@ public class User implements UserDetails, Principal {
     private boolean accountLocked;
 
     private boolean accountEnabled;
+    
+    private String verificationToken;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
