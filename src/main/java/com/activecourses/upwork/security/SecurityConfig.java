@@ -18,7 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final String[] publicUrl={"/login"};
+    private final String[] publicUrl={
+        "/login",
+        "/api/users/register"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

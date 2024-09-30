@@ -11,7 +11,8 @@ CREATE TABLE users
     account_locked   BOOLEAN             NOT NULL DEFAULT FALSE,
     created_at       TIMESTAMP(6)                 DEFAULT CURRENT_TIMESTAMP NOT NULL,
     last_modified_at TIMESTAMP(6),
-    last_login       TIMESTAMP
+    last_login       TIMESTAMP,
+    verification_token VARCHAR(255)
 );
 
 CREATE TABLE roles
