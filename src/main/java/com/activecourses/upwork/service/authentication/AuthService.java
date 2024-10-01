@@ -1,7 +1,7 @@
 package com.activecourses.upwork.service.authentication;
 
-import com.activecourses.upwork.dto.LoginRequestDto;
-import com.activecourses.upwork.dto.LoginResponseDto;
+import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
+import com.activecourses.upwork.dto.authentication.login.LoginResponseDto;
 import com.activecourses.upwork.model.User;
 
 public interface AuthService {

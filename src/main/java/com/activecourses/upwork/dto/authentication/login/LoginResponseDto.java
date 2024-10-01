@@ -1,4 +1,4 @@
-package com.activecourses.upwork.dto;
+package com.activecourses.upwork.dto.authentication.login;
 
 import lombok.Builder;
 import lombok.Data;

@@ -3,10 +3,8 @@ package com.activecourses.upwork.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -56,10 +54,10 @@ public class User implements UserDetails, Principal {
     @NotBlank
     private String password;
 
-    private boolean accountLocked;
+    private boolean accountLocked = false;
 
-    private boolean accountEnabled;
-    
+    private boolean accountEnabled = true;
+
     private String verificationToken;
 
     @ManyToMany(fetch = FetchType.LAZY)

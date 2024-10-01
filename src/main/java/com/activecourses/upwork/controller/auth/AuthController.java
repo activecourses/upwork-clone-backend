@@ -1,6 +1,6 @@
 package com.activecourses.upwork.controller.auth;
 
-import com.activecourses.upwork.dto.LoginRequestDto;
+import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.service.authentication.AuthService;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth/")
 public class AuthController {
     private final AuthService authService;
-
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerUser(@RequestBody User user) {
