@@ -1,18 +1,19 @@
-package com.activecourses.upwork.service;
+package com.activecourses.upwork.service.authentication;
 
 import com.activecourses.upwork.dto.LoginRequestDto;
 import com.activecourses.upwork.dto.LoginResponseDto;
+import com.activecourses.upwork.exception.AuthenticationException;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
 import com.activecourses.upwork.config.security.JwtService;
 
 import lombok.RequiredArgsConstructor;
+
 import java.util.Optional;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,19 +37,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
-        User user = userRepository.findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new BadCredentialsException(""));
-        String accessToken = jwtService.generateAccessToken(user.getUsername());
-        String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+            User user = userRepository.findByEmail(loginRequestDto.getEmail())
+                    .orElseThrow(() -> new AuthenticationException("Email or Password is incorrect"));
 
-        return LoginResponseDto
-                .builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+            String accessToken = jwtService.generateAccessToken(user.getUsername());
+            String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+
+            return LoginResponseDto
+                    .builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        } catch (Exception e) {
+            throw new AuthenticationException("Email or Password is incorrect");
+        }
     }
 
     @Override
@@ -73,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sendVerificationEmail(User user) {
         String verificationLink = "http://localhost:8080/api/users/verify?token=" + user.getVerificationToken();
-        
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Email Verification");

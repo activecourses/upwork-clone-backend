@@ -2,6 +2,7 @@ package com.activecourses.upwork.service;
 
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
+import com.activecourses.upwork.service.authentication.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class UserServiceTest {
+class AuthServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -24,7 +25,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserServiceImpl userService;
+    private AuthServiceImpl userService;
 
     @BeforeEach
     void setUp() {
