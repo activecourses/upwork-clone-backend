@@ -37,6 +37,10 @@ When you run the application, Flyway will automatically create the necessary tab
 
 ## API Endpoints
 
+You can access Swagger UI from this link: http://localhost:8080/swagger-ui/index.html
+
+![Screenshot 2024-10-01 at 13-09-32 Swagger UI](https://github.com/user-attachments/assets/4848fef9-31ff-4fc5-87c5-e1ac097360a0)
+
 ### Authentication
 
 - **Register a new user**
