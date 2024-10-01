@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class userRegistrationMapper implements Mapper<User, RegistrationRequestDto> {
+public class UserRegistrationMapper implements Mapper<User, RegistrationRequestDto> {
 
     private final RoleRepository roleRepository;
 
