@@ -23,14 +23,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
-            "/login",
-            "/api/users/register",
-            "/auth/**",
+            "/api/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
             "/api-docs/**",
-            "/api-doc/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
@@ -41,15 +38,29 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
+    private static final String[] AUTH_ADMIN = {
+            "/api/admin/**"
+    };
+
+    private static final String[] AUTH_FREELANCER = {
+            "/api/freelancer/**"
+    };
+
+    private static final String[] AUTH_CLIENT = {
+            "/api/client/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(configurer ->
-                configurer.requestMatchers(AUTH_WHITELIST)
-                        .permitAll()
-                        .anyRequest().authenticated());
+        http.authorizeHttpRequests(configurer -> configurer
+                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .requestMatchers(AUTH_ADMIN).hasRole("ADMIN")  // Only admins can access admin routes
+                .requestMatchers(AUTH_FREELANCER).hasRole("FREELANCER")  // Freelancer access
+                .requestMatchers(AUTH_CLIENT).hasRole("CLIENT")  // Client access
+                .anyRequest().authenticated()
+        );
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
         http.httpBasic(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
 
@@ -67,7 +78,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-
     }
 
     @Bean

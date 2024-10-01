@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users", indexes = {
         @Index(name = "idx_users_email", columnList = "email")
@@ -54,8 +56,10 @@ public class User implements UserDetails, Principal {
     @NotBlank
     private String password;
 
+    @Builder.Default
     private boolean accountLocked = false;
 
+    @Builder.Default
     private boolean accountEnabled = true;
 
     private String verificationToken;

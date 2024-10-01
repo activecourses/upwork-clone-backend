@@ -2,7 +2,10 @@ package com.activecourses.upwork.service.authentication;
 
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.authentication.login.LoginResponseDto;
+import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
+import com.activecourses.upwork.dto.authentication.registration.RegistrationResponseDto;
 import com.activecourses.upwork.exception.AuthenticationException;
+import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
 import com.activecourses.upwork.config.security.JwtService;
@@ -28,11 +31,19 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final JavaMailSender mailSender;
+    private final Mapper<User, RegistrationRequestDto> userMapper;
+
 
     @Override
-    public void registerUser(User user) {
+    public RegistrationResponseDto registerUser(RegistrationRequestDto registrationRequestDto) {
+        User user = userMapper.mapFrom(registrationRequestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+
+        return RegistrationResponseDto
+                .builder()
+                .message("User registered successfully, please verify your email")
+                .build();
     }
 
     @Override
@@ -44,8 +55,8 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepository.findByEmail(loginRequestDto.getEmail())
                     .orElseThrow(() -> new AuthenticationException("Email or Password is incorrect"));
 
-            String accessToken = jwtService.generateAccessToken(user.getUsername());
-            String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
 
             return LoginResponseDto
                     .builder()
