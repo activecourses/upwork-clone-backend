@@ -4,7 +4,7 @@ import com.activecourses.upwork.dto.LoginRequestDto;
 import com.activecourses.upwork.dto.LoginResponseDto;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
-import com.activecourses.upwork.security.JwtService;
+import com.activecourses.upwork.config.security.JwtService;
 
 import lombok.RequiredArgsConstructor;
 import java.util.Optional;

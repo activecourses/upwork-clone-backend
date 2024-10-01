@@ -1,9 +1,8 @@
-package com.activecourses.upwork.security;
+package com.activecourses.upwork.config.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;

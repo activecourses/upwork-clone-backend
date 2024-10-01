@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class AuthController {
     private final UserService userService;
+
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         try {
@@ -41,7 +42,5 @@ public class AuthController {
                             .build()
                     );
         }
-
     }
-
 }
