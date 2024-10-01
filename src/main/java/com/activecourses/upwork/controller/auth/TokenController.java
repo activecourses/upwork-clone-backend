@@ -1,28 +1,33 @@
-package com.activecourses.upwork.controller;
+package com.activecourses.upwork.controller.auth;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.service.UserService;
-
-import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@AllArgsConstructor
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/auth")
+public class TokenController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        userService.registerUser(user);
-        return ResponseEntity.ok("Registration successful! Please check your email to verify.");
+    public TokenController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("refresh-token")
+    public ResponseEntity<?> refreshToken() {
+        // TODO: to be implemented
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto
+                        .builder()
+                        .status(HttpStatus.OK)
+                        .success(true)
+                        .data("refresh token")
+                        .build()
+                );
     }
 
     @GetMapping("/verify")

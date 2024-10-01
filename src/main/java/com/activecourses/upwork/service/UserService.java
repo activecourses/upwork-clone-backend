@@ -6,7 +6,7 @@ import com.activecourses.upwork.model.User;
 
 public interface UserService {
     void registerUser(User user);
-    LoginResponseDto verify(LoginRequestDto loginRequestDto);
+    LoginResponseDto login(LoginRequestDto loginRequestDto);
     boolean verifyUser(String token);
     User findByEmail(String email);
     void sendVerificationEmail(User user);
