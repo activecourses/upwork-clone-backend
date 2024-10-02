@@ -4,6 +4,7 @@ import com.activecourses.upwork.dto.ResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,19 @@ public class GlobalExceptionHandler {
                         .status(HttpStatus.UNAUTHORIZED)
                         .success(false)
                         .error(ex.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseDto> handleBadCredentialsException(BadCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ResponseDto
+                        .builder()
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .success(false)
+                        .error("Invalid username or password")
                         .build()
                 );
     }

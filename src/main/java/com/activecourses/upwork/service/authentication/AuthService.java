@@ -5,12 +5,15 @@ import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationResponseDto;
 import com.activecourses.upwork.model.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
 public interface AuthService {
     RegistrationResponseDto registerUser(RegistrationRequestDto registrationRequestDto);
     ResponseDto login(LoginRequestDto loginRequestDto);
+
+    ResponseEntity<?> logout();
 
     Optional<User> refreshToken(String refreshToken);
 

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Tag(name = "Authentication", description = "Authentication API")
 @RestController
 @RequiredArgsConstructor
@@ -50,11 +52,12 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         ResponseDto responseDto = authService.login(loginRequestDto);
-        ResponseCookie jwtCookie = (ResponseCookie) responseDto.getData();
+        Map<String, ResponseCookie> cookies = (Map<String, ResponseCookie>) responseDto.getData();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body("User logged in successfully!");
+                .header(HttpHeaders.SET_COOKIE, cookies.get("jwtCookie").toString())
+                .header(HttpHeaders.SET_COOKIE, cookies.get("refreshJwtCookie").toString())
+                .body("Login successful: User: " + loginRequestDto.getEmail());
     }
 
     @Operation(
@@ -64,55 +67,6 @@ public class AuthController {
     )
     @PostMapping("logout")
     public ResponseEntity<?> logout() {
-        ResponseCookie jwtCookie = jwtService.getCleanJwtCookie();
-        ResponseCookie refreshJwtCookie = jwtService.getCleanJwtRefreshCookie();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, refreshJwtCookie.toString())
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
-                        .success(true)
-                        .data("User logged out successfully!")
-                        .build()
-                );
+        return authService.logout();
     }
-
-//    @Operation(
-//            summary = "Refresh token",
-//            description = "Refresh access token using refresh token",
-//            security = @SecurityRequirement(name = "")
-//    )
-//    @PostMapping("refresh-token")
-//    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-//        String refreshToken = jwtService.getJwtRefreshFromCookies(request);
-//
-//        if ((refreshToken != null) && (refreshToken.length() > 0)) {
-//            return authService.refreshToken(refreshToken)
-//                    .map(user -> {
-//                        ResponseCookie jwtCookie = jwtService.generateJwtCookie(user);
-//
-//                        return ResponseEntity.ok()
-//                                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-//                                .body(ResponseDto
-//                                        .builder()
-//                                        .status(HttpStatus.OK)
-//                                        .success(true)
-//                                        .message("Token is refreshed successfully!")
-//                                        .build()
-//                                );
-//                    })
-//                    .orElseThrow(() -> new TokenRefreshException(refreshToken, "Refresh token is not in database!"));
-//        }
-//
-//        return ResponseEntity.badRequest()
-//                .body(ResponseDto
-//                        .builder()
-//                        .status(HttpStatus.BAD_REQUEST)
-//                        .success(false)
-//                        .message("Refresh Token is empty!")
-//                        .build()
-//                );
-//    }
 }

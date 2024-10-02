@@ -1,19 +1,17 @@
 package com.activecourses.upwork.controller.auth;
 
-import com.activecourses.upwork.config.security.CustomeUserDetailsService;
-import com.activecourses.upwork.config.security.jwt.JwtService;
 import com.activecourses.upwork.dto.ResponseDto;
+import com.activecourses.upwork.exception.TokenRefreshException;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.service.authentication.AuthService;
+import com.activecourses.upwork.service.authentication.RefreshTokenService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Token", description = "Token API")
@@ -22,41 +20,24 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class TokenController {
     private final AuthService authService;
-    private final JwtService jwtService;
-    private final CustomeUserDetailsService userDetailsService;
+    private final RefreshTokenService refreshTokenService;
 
     @Operation(
             summary = "Refresh token, to be implemented",
             description = "Refresh token"
     )
     @PostMapping("refresh-token")
-    public ResponseEntity<ResponseDto> refreshToken(HttpServletRequest request) {
-        String refreshToken = jwtService.getJwtRefreshFromCookies(request);
-
-        if (refreshToken != null && jwtService.validateJwtToken(refreshToken)) {
-            String username = jwtService.getUserNameFromJwtToken(refreshToken);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            // Generate new access token
-            String newAccessToken = jwtService.generateAccessToken(userDetails);
-            ResponseCookie jwtCookie = jwtService.generateJwtCookie((User) userDetails);
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body(ResponseDto.builder()
-                            .status(HttpStatus.OK)
-                            .success(true)
-                            .data("New access token generated")
-                            .build());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder()
-                    .status(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        try {
+            return refreshTokenService.refreshToken(request);
+        } catch (TokenRefreshException e) {
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .status(HttpStatus.BAD_REQUEST)
                     .success(false)
-                    .data("Invalid refresh token")
+                    .data(e.getMessage())
                     .build());
         }
     }
-
 
     @Operation(
             summary = "Verify email",
@@ -83,5 +64,16 @@ public class TokenController {
             return ResponseEntity.ok("Verification email resent.");
         }
         return ResponseEntity.badRequest().body("User not found or already verified.");
+    }
+
+    @SecurityRequirement(name = "")
+    @PostMapping("delete-token/{id}")
+    public ResponseEntity<?> deleteToken(@PathVariable int id) {
+        int deletedCount = refreshTokenService.deleteByUserId(id);
+        if (deletedCount > 0) {
+            return ResponseEntity.ok("Refresh token deleted successfully!");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

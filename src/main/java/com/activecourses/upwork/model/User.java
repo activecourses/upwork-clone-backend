@@ -64,7 +64,10 @@ public class User implements UserDetails, Principal {
 
     private String verificationToken;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true)
+    private RefreshToken refreshToken;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -121,4 +124,6 @@ public class User implements UserDetails, Principal {
     public boolean isEnabled() {
         return accountEnabled;
     }
+
+
 }
