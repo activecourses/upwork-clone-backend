@@ -22,9 +22,13 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
-      expiration: 86400000 # a day
+      expiration: 60000 # 1 minute, for testing
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: 180000 # 3 minutes, for testing
+      cookie:
+        jwt-cookie-name: ${JWT_COOKIE_NAME}
+        jwt-refresh-cookie-name: ${JWT_REFRESH_COOKIE_NAME}
+        max-age: ${JWT_COOKIE_MAX_AGE}
 
 springdoc:
   api-docs:

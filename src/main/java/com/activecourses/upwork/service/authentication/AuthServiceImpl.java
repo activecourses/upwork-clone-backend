@@ -1,24 +1,27 @@
 package com.activecourses.upwork.service.authentication;
 
+import com.activecourses.upwork.config.security.CustomeUserDetailsService;
+import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
-import com.activecourses.upwork.dto.authentication.login.LoginResponseDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationResponseDto;
-import com.activecourses.upwork.exception.AuthenticationException;
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
-import com.activecourses.upwork.config.security.JwtService;
+import com.activecourses.upwork.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final JavaMailSender mailSender;
     private final Mapper<User, RegistrationRequestDto> userMapper;
+    private final CustomeUserDetailsService customeUserDetailsService;
 
 
     @Override
@@ -47,25 +51,27 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
+    public ResponseDto login(LoginRequestDto loginRequestDto) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
-            User user = userRepository.findByEmail(loginRequestDto.getEmail())
-                    .orElseThrow(() -> new AuthenticationException("Email or Password is incorrect"));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String accessToken = jwtService.generateAccessToken(user);
-            String refreshToken = jwtService.generateRefreshToken(user);
+        UserDetails userDetails = customeUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
 
-            return LoginResponseDto
-                    .builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .build();
-        } catch (Exception e) {
-            throw new AuthenticationException("Email or Password is incorrect");
-        }
+        ResponseCookie jwtCookie = jwtService.generateJwtCookie(userDetails);
+
+        return ResponseDto
+                .builder()
+                .success(true)
+                .data(jwtCookie)
+                .build();
+    }
+
+    @Override
+    public Optional<User> refreshToken(String refreshToken) {
+        String username = jwtService.getUserNameFromJwtToken(refreshToken);
+        return userRepository.findByEmail(username);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.activecourses.upwork.config.security;
 
+import com.activecourses.upwork.config.security.jwt.AuthEntryPointJwt;
+import com.activecourses.upwork.config.security.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,11 +18,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -51,25 +55,17 @@ public class SecurityConfig {
             "/api/client/**"
     };
 
+    private final CustomeUserDetailsService customeUserDetailsService;
+
+    private AuthEntryPointJwt unauthorizedHandler;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(configurer -> configurer
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                .requestMatchers(AUTH_ADMIN).hasRole("ADMIN")  // Only admins can access admin routes
-                .requestMatchers(AUTH_FREELANCER).hasRole("FREELANCER")  // Freelancer access
-                .requestMatchers(AUTH_CLIENT).hasRole("CLIENT")  // Client access
-                .anyRequest().authenticated()
-        );
-
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.httpBasic(Customizer.withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
-
-        return http.build();
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(CustomeUserDetailsService customeUserDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
         auth.setUserDetailsService(customeUserDetailsService);
         auth.setPasswordEncoder(passwordEncoder());
@@ -84,5 +80,28 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(configurer -> configurer
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers(AUTH_ADMIN).hasRole("ADMIN")  // Only admins can access admin routes
+                        .requestMatchers(AUTH_FREELANCER).hasRole("FREELANCER")  // Freelancer access
+                        .requestMatchers(AUTH_CLIENT).hasRole("CLIENT")  // Client access
+                        .anyRequest().authenticated()
+                );
+
+        http.httpBasic(Customizer.withDefaults());
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+//
+//
+//
     }
 }
