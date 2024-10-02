@@ -3,7 +3,6 @@ package com.activecourses.upwork.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users", indexes = {
         @Index(name = "idx_users_email", columnList = "email")
@@ -56,10 +56,12 @@ public class User implements UserDetails, Principal {
     @NotBlank
     private String password;
 
-    private boolean accountLocked;
+    @Builder.Default
+    private boolean accountLocked = false;
 
-    private boolean accountEnabled;
-    
+    @Builder.Default
+    private boolean accountEnabled = true;
+
     private String verificationToken;
 
     @ManyToMany(fetch = FetchType.LAZY)

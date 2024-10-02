@@ -1,4 +1,4 @@
-package com.activecourses.upwork.security;
+package com.activecourses.upwork.config.security;
 
 import com.activecourses.upwork.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

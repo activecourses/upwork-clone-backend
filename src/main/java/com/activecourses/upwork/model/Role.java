@@ -31,6 +31,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // "ROLE_ADMIN", "ROLE_FREELANCER", and "ROLE_CLIENT".
     @Column(unique = true, nullable = false)
     private String name;
 
