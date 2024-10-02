@@ -1,6 +1,5 @@
 package com.activecourses.upwork.config.security;
 
-import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
