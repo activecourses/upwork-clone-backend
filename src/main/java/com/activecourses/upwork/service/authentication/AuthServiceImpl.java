@@ -163,6 +163,30 @@ public class AuthServiceImpl implements AuthService {
         mailSender.send(message);
     }
 
+    @Override
+    public boolean deactivateUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        User unwrappedUser = unwrapUser(user);
+        if (unwrappedUser != null) {
+            unwrappedUser.setAccountEnabled(false);
+            userRepository.save(unwrappedUser);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean reactivateUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        User unwrappedUser = unwrapUser(user);
+        if (unwrappedUser != null) {
+            unwrappedUser.setAccountEnabled(true);
+            userRepository.save(unwrappedUser);
+            return true;
+        }
+        return false;
+    }
+
     static User unwrapUser(Optional<User> entity) {
         if (entity.isPresent()) return entity.get();
         else throw new UnsupportedOperationException("Unimplemented method 'unwrapUser'");
