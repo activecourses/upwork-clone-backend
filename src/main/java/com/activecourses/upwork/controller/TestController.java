@@ -22,7 +22,7 @@ public class TestController {
         return "All Users Content.";
     }
 
-    @GetMapping("/mod")
+    @GetMapping("/client")
     @PreAuthorize("hasRole('CLIENT')")
     public String clientAccess() {
         return "Client Board.";
