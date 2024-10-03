@@ -60,6 +60,27 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public ResponseDto login(LoginRequestDto loginRequestDto) {
+
+        User user = findByEmail(loginRequestDto.getEmail());
+
+        if (!user.isAccountEnabled()) {
+            return ResponseDto
+                    .builder()
+                    .status(HttpStatus.FORBIDDEN)
+                    .success(false)
+                    .error("Account is disabled.")
+                    .build();
+        }
+        
+        if (user.isAccountLocked()) {
+            return ResponseDto
+                    .builder()
+                    .status(HttpStatus.LOCKED)
+                    .success(false)
+                    .error("Account is locked due to multiple failed login attempts.")
+                    .build();
+        }
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
