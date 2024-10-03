@@ -60,6 +60,52 @@ public class AuthController {
                 .body("Login successful: User: " + loginRequestDto.getEmail());
     }
 
+        @Operation(
+                summary = "Deactivate user",
+                description = "Deactivate user",
+                security = @SecurityRequirement(name = "")
+        )
+    @PostMapping("/{id}/deactivate")
+    public ResponseDto deactivateUser(@PathVariable Long id) {
+        boolean success = authService.deactivateUser(id);
+        if (success) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .data("User account deactivated successfully.")
+                    .build();
+        } else {
+            return ResponseDto.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .success(false)
+                    .error("User not found.")
+                    .build();
+        }
+    }
+
+    @Operation(
+            summary = "Reactivate user",
+            description = "Reactivate user",
+            security = @SecurityRequirement(name = "")
+    )
+    @PostMapping("/{id}/reactivate")
+    public ResponseDto reactivateUser(@PathVariable Long id) {
+        boolean success = authService.reactivateUser(id);
+        if (success) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .data("User account reactivated successfully.")
+                    .build();
+        } else {
+            return ResponseDto.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .success(false)
+                    .error("User not found.")
+                    .build();
+        }
+    }
+
     @Operation(
             summary = "Logout",
             description = "Logout",
