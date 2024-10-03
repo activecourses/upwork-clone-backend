@@ -1,4 +1,4 @@
-# Upwork-Clone
+## Upwork-Clone
 
 A platform connecting freelancers and clients for job postings, proposals, and real-time chat.
 
@@ -23,13 +23,11 @@ A platform connecting freelancers and clients for job postings, proposals, and r
    POSTGRES_PASSWORD=<password>
    POSTGRES_DB=<database-name>
     ```
-  Replace `<username>`, `<password>`, and `<database-name>` with the values you used when creating the PostgreSQL
-  container.
+  Replace `<username>`, `<password>`, and `<database-name>` with the values you used when creating the PostgreSQL container.
 
 ### Flyway
 
-Flyway is used to manage database migrations. The SQL scripts are located in `src/main/resources/db/migration`.
-When you run the application, Flyway will automatically create the necessary tables in the database.
+Flyway is used to manage database migrations. The SQL scripts are located in `src/main/resources/db/migration`. When you run the application, Flyway will automatically create the necessary tables in the database.
 
 #### To-Do
 
@@ -62,7 +60,10 @@ You can access Swagger UI from this link: http://localhost:8080/swagger-ui/index
       {
         "status": "OK",
         "success": true,
-        "data": "User registered successfully, please verify your email"
+        "data": {
+          "message": "User registered successfully, please verify your email"
+        },
+        "error": null
       }
       ```
 
@@ -78,18 +79,12 @@ You can access Swagger UI from this link: http://localhost:8080/swagger-ui/index
       }
       ```
     - **Response:**
-      ```json
-      {
-        "status": "OK",
-        "success": true,
-        "data": {
-          "accessToken": "string",
-          "refreshToken": "string"
-        }
-      }
       ```
+        Login successful: User: hello@gmail.com
+      ```
+    - **Note:** The JWT and Refresh tokens are now sent as HttpOnly cookies.
 
-- **Logout** (To be implemented)
+- **Logout**
     - **URL:** `/api/auth/logout`
     - **Method:** `POST`
     - **Description:** Logout a user.
@@ -98,13 +93,14 @@ You can access Swagger UI from this link: http://localhost:8080/swagger-ui/index
       {
         "status": "OK",
         "success": true,
-        "data": "logout successfully"
+        "data": "User logged out successfully!",
+        "error": null
       }
       ```
 
 ### Token
 
-- **Refresh token** (To be implemented)
+- **Refresh token**
     - **URL:** `/api/auth/refresh-token`
     - **Method:** `POST`
     - **Description:** Refresh the authentication token.
@@ -113,6 +109,8 @@ You can access Swagger UI from this link: http://localhost:8080/swagger-ui/index
       {
         "status": "OK",
         "success": true,
-        "data": "refresh token"
+        "data": "Token is refreshed successfully!",
+        "error": null
       }
       ```
+    - **Note:** The new JWT and Refresh tokens are now sent as HttpOnly cookies. The Refresh token is also stored in the database for better security.

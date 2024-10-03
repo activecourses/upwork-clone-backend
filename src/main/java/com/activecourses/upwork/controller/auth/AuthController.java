@@ -1,5 +1,6 @@
 package com.activecourses.upwork.controller.auth;
 
+import com.activecourses.upwork.config.security.jwt.JwtService;
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
@@ -9,9 +10,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Tag(name = "Authentication", description = "Authentication API")
 @RestController
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth/")
 public class AuthController {
     private final AuthService authService;
+    private final JwtService jwtService;
 
     @Operation(
             summary = "Register a new user",
@@ -44,34 +50,23 @@ public class AuthController {
             security = @SecurityRequirement(name = "")
     )
     @PostMapping("login")
-    public ResponseEntity<ResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
-                        .success(true)
-                        .data(authService.login(loginRequestDto))
-                        .build()
-                );
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        ResponseDto responseDto = authService.login(loginRequestDto);
+        Map<String, ResponseCookie> cookies = (Map<String, ResponseCookie>) responseDto.getData();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookies.get("jwtCookie").toString())
+                .header(HttpHeaders.SET_COOKIE, cookies.get("refreshJwtCookie").toString())
+                .body("Login successful: User: " + loginRequestDto.getEmail());
     }
 
     @Operation(
-            summary = "Logout, to be implemented",
+            summary = "Logout",
             description = "Logout",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @PostMapping("logout")
     public ResponseEntity<?> logout() {
-        // TODO: to be implemented
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
-                        .success(true)
-                        .data("logout successfully")
-                        .build()
-                );
+        return authService.logout();
     }
 }
