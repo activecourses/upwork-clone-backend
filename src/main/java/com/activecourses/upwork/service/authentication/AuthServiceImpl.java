@@ -162,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
         message.setText("Click the link to verify your email: " + verificationLink);
         mailSender.send(message);
     }
-
+    
     @Override
     public boolean deactivateUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);

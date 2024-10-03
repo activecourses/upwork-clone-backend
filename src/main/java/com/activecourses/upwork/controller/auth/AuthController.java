@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -60,11 +61,12 @@ public class AuthController {
                 .body("Login successful: User: " + loginRequestDto.getEmail());
     }
 
-        @Operation(
-                summary = "Deactivate user",
-                description = "Deactivate user",
-                security = @SecurityRequirement(name = "")
-        )
+    @Operation(
+        summary = "Deactivate user",
+        description = "Deactivate user",
+        security = @SecurityRequirement(name = "")
+    )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/deactivate")
     public ResponseDto deactivateUser(@PathVariable Long id) {
         boolean success = authService.deactivateUser(id);
@@ -88,6 +90,7 @@ public class AuthController {
             description = "Reactivate user",
             security = @SecurityRequirement(name = "")
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/reactivate")
     public ResponseDto reactivateUser(@PathVariable Long id) {
         boolean success = authService.reactivateUser(id);
