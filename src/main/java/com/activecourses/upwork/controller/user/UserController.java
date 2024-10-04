@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -40,13 +39,14 @@ public class UserController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {
-        List<UserResponseDto> users = userService.getAllUsers(pageNo, pageSize);
-        return ResponseEntity.ok(
-                ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
+        UserResponseDto userResponseDto = userService.getAllUsers(pageNo, pageSize);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto.
+                        builder()
+                        .data(userResponseDto)
                         .success(true)
-                        .data(users)
+                        .status(HttpStatus.OK)
                         .build());
     }
 }

@@ -1,6 +1,6 @@
 package com.activecourses.upwork.mapper.user;
 
-import com.activecourses.upwork.dto.user.UserResponseDto;
+import com.activecourses.upwork.dto.user.UserDto;
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.model.Role;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class UserResponseMapper implements Mapper<User, UserResponseDto> {
+public class UserDtoMapper implements Mapper<User, UserDto> {
     @Override
-    public UserResponseDto mapTo(User user) {
-        return UserResponseDto.builder()
+    public UserDto mapTo(User user) {
+        return UserDto.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -27,7 +27,7 @@ public class UserResponseMapper implements Mapper<User, UserResponseDto> {
     }
 
     @Override
-    public User mapFrom(UserResponseDto userResponseDto) {
+    public User mapFrom(UserDto userDto) {
         throw new UnsupportedOperationException(); // Not needed
     }
 }

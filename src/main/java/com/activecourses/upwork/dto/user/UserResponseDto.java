@@ -1,23 +1,19 @@
 package com.activecourses.upwork.dto.user;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserResponseDto {
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private boolean isAccountLocked;
-    private boolean isAccountEnabled;
-    private List<String> roles;
-    private LocalDateTime createdAt;
+    private List<UserDto> content;
+    private int pageNo;
+    private int pageSize;
+    private int totalElements;
+    private int totalPages;
+    private boolean last;
 }
