@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:myconfig.properties")
+@PropertySource("classpath:env.properties")
 public class MailConfig {
 
     @Value("${mail.username}")
