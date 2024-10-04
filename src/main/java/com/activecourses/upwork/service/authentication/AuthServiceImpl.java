@@ -164,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
     }
     
     @Override
-    public boolean deactivateUser(Long userId) {
+    public boolean deactivateUser(int userId) {
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
         if (unwrappedUser != null) {
@@ -176,7 +176,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean reactivateUser(Long userId) {
+    public boolean reactivateUser(int userId) {
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
         if (unwrappedUser != null) {

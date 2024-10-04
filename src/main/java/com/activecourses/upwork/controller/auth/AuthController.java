@@ -68,7 +68,7 @@ public class AuthController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/deactivate")
-    public ResponseDto deactivateUser(@PathVariable Long id) {
+    public ResponseDto deactivateUser(@PathVariable int id) {
         boolean success = authService.deactivateUser(id);
         if (success) {
             return ResponseDto.builder()
@@ -92,7 +92,7 @@ public class AuthController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/reactivate")
-    public ResponseDto reactivateUser(@PathVariable Long id) {
+    public ResponseDto reactivateUser(@PathVariable int id) {
         boolean success = authService.reactivateUser(id);
         if (success) {
             return ResponseDto.builder()
