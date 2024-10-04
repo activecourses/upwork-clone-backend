@@ -155,6 +155,78 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
     - `id`: The ID of the user to reactivate
 - **Response:** A `ResponseDto` object containing the result of the operation.
 </details>
+<details>
+   <summary>Get user profile</summary>
+
+- **URL:** `/api/users/profile/{userId}`
+- **Method:** `GET`
+- **Description:** Retrieve the profile information for a specific user.
+- **Path Parameters:**
+  - `id` (required): The ID of the user whose profile is to be retrieved.
+    - **Response:**
+      - **Status Code:** `200 OK`
+      - **Body:**
+        ```json
+        {
+        "status": "OK",
+        "success": true,
+        "data": {
+        "id": 160,
+        "firstName": "Teddy",
+        "lastName": "Johnson",
+        "title": null,
+        "description": null,
+        "hourlyRate": null,
+        "location": null
+          },
+        "error": null
+        }
+        ```
+</details>
+<details>
+   <summary>Update user profile</summary>
+
+- **URL:** `/api/users/profile/{id}`
+- **Method:** `PUT`
+- **Description:** Update the profile information for a specific user.
+- **Path Parameters:**
+  - `id` (required): The ID of the user whose currently logged in.
+    - **Request Body:**
+      - **Content-Type:** `application/json`
+        - **Body Example:**
+          ```json
+          {
+            "id": 160,
+            "firstName": "string",
+            "lastName": "string",
+            "title": "string",
+            "description": "string",
+            "hourlyRate": 0,
+            "location": "string"
+          }
+          ```
+- **Response:**
+  - **Status Code:** `200 OK`
+  - **Body Example:**
+    ```json
+        {
+        "status": "OK",
+        "success": true,
+        "data": {
+        "id": 160,
+        "firstName": "string",
+        "lastName": "string",
+        "title": "string",
+        "description": "string",
+        "hourlyRate": 0,
+        "location": "string"
+          },
+        "error": null
+        }
+    
+    ```
+
+</details>
 
 ### Password Management
 
