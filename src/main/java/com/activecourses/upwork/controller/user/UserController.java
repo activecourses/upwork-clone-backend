@@ -26,6 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // TODO: update it so than it can be sorted by multiple fields
     @Operation(summary = "Get all users",
             description = "Retrieve a paginated list of all users. Only accessible by users with the ROLE_ADMIN role.",
             parameters = {
