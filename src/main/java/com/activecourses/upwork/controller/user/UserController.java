@@ -30,16 +30,20 @@ public class UserController {
             description = "Retrieve a paginated list of all users. Only accessible by users with the ROLE_ADMIN role.",
             parameters = {
                     @Parameter(name = "pageNo", in = ParameterIn.QUERY, description = "Page number", required = false, schema = @Schema(type = "integer", defaultValue = "0")),
-                    @Parameter(name = "pageSize", in = ParameterIn.QUERY, description = "Page size", required = false, schema = @Schema(type = "integer", defaultValue = "10"))
+                    @Parameter(name = "pageSize", in = ParameterIn.QUERY, description = "Page size", required = false, schema = @Schema(type = "integer", defaultValue = "10")),
+                    @Parameter(name = "sortBy", in = ParameterIn.QUERY, description = "Sort by", required = false, schema = @Schema(type = "string", defaultValue = "id")),
+                    @Parameter(name = "sortDir", in = ParameterIn.QUERY, description = "Sort direction", required = false, schema = @Schema(type = "string", defaultValue = "asc"))
             }
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<ResponseDto> getAllUsers(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
-        UserResponseDto userResponseDto = userService.getAllUsers(pageNo, pageSize);
+        UserResponseDto userResponseDto = userService.getAllUsers(pageNo, pageSize, sortBy, sortDir);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseDto.
