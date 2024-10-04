@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -58,6 +59,54 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookies.get("jwtCookie").toString())
                 .header(HttpHeaders.SET_COOKIE, cookies.get("refreshJwtCookie").toString())
                 .body("Login successful: User: " + loginRequestDto.getEmail());
+    }
+
+    @Operation(
+        summary = "Deactivate user",
+        description = "Deactivate user",
+        security = @SecurityRequirement(name = "")
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/deactivate")
+    public ResponseDto deactivateUser(@PathVariable Long id) {
+        boolean success = authService.deactivateUser(id);
+        if (success) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .data("User account deactivated successfully.")
+                    .build();
+        } else {
+            return ResponseDto.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .success(false)
+                    .error("User not found.")
+                    .build();
+        }
+    }
+
+    @Operation(
+            summary = "Reactivate user",
+            description = "Reactivate user",
+            security = @SecurityRequirement(name = "")
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/reactivate")
+    public ResponseDto reactivateUser(@PathVariable Long id) {
+        boolean success = authService.reactivateUser(id);
+        if (success) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .data("User account reactivated successfully.")
+                    .build();
+        } else {
+            return ResponseDto.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .success(false)
+                    .error("User not found.")
+                    .build();
+        }
     }
 
     @Operation(

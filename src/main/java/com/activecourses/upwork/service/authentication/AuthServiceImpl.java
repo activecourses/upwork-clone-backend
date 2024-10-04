@@ -60,6 +60,27 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public ResponseDto login(LoginRequestDto loginRequestDto) {
+
+        User user = findByEmail(loginRequestDto.getEmail());
+
+        if (!user.isAccountEnabled()) {
+            return ResponseDto
+                    .builder()
+                    .status(HttpStatus.FORBIDDEN)
+                    .success(false)
+                    .error("Account is disabled.")
+                    .build();
+        }
+        
+        if (user.isAccountLocked()) {
+            return ResponseDto
+                    .builder()
+                    .status(HttpStatus.LOCKED)
+                    .success(false)
+                    .error("Account is locked due to multiple failed login attempts.")
+                    .build();
+        }
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
@@ -140,6 +161,30 @@ public class AuthServiceImpl implements AuthService {
         message.setSubject("Email Verification");
         message.setText("Click the link to verify your email: " + verificationLink);
         mailSender.send(message);
+    }
+    
+    @Override
+    public boolean deactivateUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        User unwrappedUser = unwrapUser(user);
+        if (unwrappedUser != null) {
+            unwrappedUser.setAccountEnabled(false);
+            userRepository.save(unwrappedUser);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean reactivateUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        User unwrappedUser = unwrapUser(user);
+        if (unwrappedUser != null) {
+            unwrappedUser.setAccountEnabled(true);
+            userRepository.save(unwrappedUser);
+            return true;
+        }
+        return false;
     }
 
     static User unwrapUser(Optional<User> entity) {

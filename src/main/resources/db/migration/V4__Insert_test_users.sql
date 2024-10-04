@@ -86,15 +86,15 @@ VALUES
 
 -- Assign role 'admin' to the first 5 users, 'client' to the next 20 users, and 'freelancer' to users starting from user 26
 WITH ranked_users AS (
-    SELECT id, 
+    SELECT id,
            ROW_NUMBER() OVER (ORDER BY id) AS rn -- Use appropriate ordering criteria
     FROM users
 )
 INSERT INTO user_roles (user_id, role_id)
 SELECT u.id, r.id
 FROM ranked_users u
-JOIN roles r ON ( 
-        (u.rn <= 5 AND r.name = 'ROLE_ADMIN') OR 
+JOIN roles r ON (
+        (u.rn <= 5 AND r.name = 'ROLE_ADMIN') OR
         (u.rn > 5 AND u.rn <= 25 AND r.name = 'ROLE_CLIENT') OR
         (u.rn > 25 AND r.name = 'ROLE_FREELANCER')  -- Assign ROLE_FREELANCER to users starting from 26
     )
