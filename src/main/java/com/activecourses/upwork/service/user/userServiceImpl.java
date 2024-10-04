@@ -5,24 +5,24 @@ import com.activecourses.upwork.dto.user.UserResponseDto;
 import com.activecourses.upwork.mapper.user.UserDtoMapper;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class userServiceImpl implements UserService {
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserDtoMapper userDtoMapper;
 
-    public userServiceImpl(UserRepository userRepository, UserDtoMapper userDtoMapper) {
-        this.userRepository = userRepository;
-        this.userDtoMapper = userDtoMapper;
-    }
+
 
     @Override
     public UserResponseDto getAllUsers(int pageNo, int pageSize, String sortBy, String sortDir) {
@@ -54,4 +54,11 @@ public class userServiceImpl implements UserService {
         userResponseDto.setLast(pagedResult.isLast());
         return userResponseDto;
     }
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).
+                orElseThrow(()->new UsernameNotFoundException("User Not Found"));
+    }
+
+
 }

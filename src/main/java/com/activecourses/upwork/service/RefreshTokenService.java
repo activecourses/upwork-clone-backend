@@ -1,4 +1,4 @@
-package com.activecourses.upwork.service.authentication;
+package com.activecourses.upwork.service;
 
 import com.activecourses.upwork.config.security.jwt.JwtService;
 import com.activecourses.upwork.dto.ResponseDto;
@@ -77,6 +77,9 @@ public class RefreshTokenService {
     }
     private String getRefreshTokenFromRequest(HttpServletRequest request) {
         return jwtService.getJwtRefreshFromCookies(request);
+    }
+    private String getTokenFromRequest(HttpServletRequest request) {
+        return jwtService.getJwtFromCookies(request);
     }
 
     private RefreshToken getRefreshTokenEntity(String refreshToken) {

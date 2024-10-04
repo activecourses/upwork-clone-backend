@@ -8,9 +8,11 @@ import com.activecourses.upwork.dto.authentication.registration.RegistrationResp
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
+import com.activecourses.upwork.model.UserProfile;
 import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.config.security.jwt.JwtService;
 
+import com.activecourses.upwork.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -49,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
     public RegistrationResponseDto registerUser(RegistrationRequestDto registrationRequestDto) {
         User user = userMapper.mapFrom(registrationRequestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserProfile(new UserProfile());
         userRepository.save(user);
 
         return RegistrationResponseDto

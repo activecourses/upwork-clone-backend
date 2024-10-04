@@ -50,7 +50,7 @@ public class AuthController {
             description = "Login",
             security = @SecurityRequirement(name = "")
     )
-    @PostMapping("login")
+    @PostMapping("login") 
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         ResponseDto responseDto = authService.login(loginRequestDto);
         Map<String, ResponseCookie> cookies = (Map<String, ResponseCookie>) responseDto.getData();
