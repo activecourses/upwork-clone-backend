@@ -1,4 +1,4 @@
-package com.activecourses.upwork.repository;
+package com.activecourses.upwork.repository.user;
 
 import com.activecourses.upwork.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

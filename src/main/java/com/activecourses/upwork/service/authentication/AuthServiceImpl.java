@@ -8,7 +8,7 @@ import com.activecourses.upwork.dto.authentication.registration.RegistrationResp
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
-import com.activecourses.upwork.repository.UserRepository;
+import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;

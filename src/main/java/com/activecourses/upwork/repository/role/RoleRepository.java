@@ -1,4 +1,4 @@
-package com.activecourses.upwork.repository;
+package com.activecourses.upwork.repository.role;
 
 import com.activecourses.upwork.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -3,7 +3,7 @@ package com.activecourses.upwork.service;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.User;
-import com.activecourses.upwork.repository.UserRepository;
+import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.service.authentication.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

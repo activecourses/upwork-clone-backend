@@ -5,7 +5,7 @@ import com.activecourses.upwork.exception.AuthenticationException;
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.Role;
 import com.activecourses.upwork.model.User;
-import com.activecourses.upwork.repository.RoleRepository;
+import com.activecourses.upwork.repository.role.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.activecourses.upwork.repository;
+package com.activecourses.upwork.repository.auth;
 
 import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
