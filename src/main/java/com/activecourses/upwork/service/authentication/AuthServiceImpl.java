@@ -1,6 +1,6 @@
 package com.activecourses.upwork.service.authentication;
 
-import com.activecourses.upwork.config.security.CustomeUserDetailsService;
+import com.activecourses.upwork.config.security.CustomUserDetailsService;
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final JavaMailSender mailSender;
     private final Mapper<User, RegistrationRequestDto> userMapper;
-    private final CustomeUserDetailsService customeUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final RefreshTokenService refreshTokenService;
 
 
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = customeUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
 
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(userDetails);
 

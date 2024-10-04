@@ -2,7 +2,7 @@ package com.activecourses.upwork.config.security.jwt;
 
 import java.io.IOException;
 
-import com.activecourses.upwork.config.security.CustomeUserDetailsService;
+import com.activecourses.upwork.config.security.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private CustomeUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

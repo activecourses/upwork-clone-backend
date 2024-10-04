@@ -54,7 +54,7 @@ public class SecurityConfig {
             "/api/client/**"
     };
 
-    private final CustomeUserDetailsService customeUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private AuthEntryPointJwt unauthorizedHandler;
 
@@ -66,7 +66,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(customeUserDetailsService);
+        auth.setUserDetailsService(customUserDetailsService);
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }
