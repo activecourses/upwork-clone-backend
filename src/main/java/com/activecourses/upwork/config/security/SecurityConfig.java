@@ -39,7 +39,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui/index.html",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/api/test/all"
     };
 
     private static final String[] AUTH_ADMIN = {
@@ -56,7 +57,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
 
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
