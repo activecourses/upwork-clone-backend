@@ -1,6 +1,6 @@
 package com.activecourses.upwork.service.authentication;
 
-import com.activecourses.upwork.config.security.CustomeUserDetailsService;
+import com.activecourses.upwork.config.security.CustomUserDetailsService;
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
@@ -8,7 +8,7 @@ import com.activecourses.upwork.dto.authentication.registration.RegistrationResp
 import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
-import com.activecourses.upwork.repository.UserRepository;
+import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.config.security.jwt.JwtService;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final JavaMailSender mailSender;
     private final Mapper<User, RegistrationRequestDto> userMapper;
-    private final CustomeUserDetailsService customeUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final RefreshTokenService refreshTokenService;
 
 
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = customeUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
 
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(userDetails);
 
@@ -164,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
     }
     
     @Override
-    public boolean deactivateUser(Long userId) {
+    public boolean deactivateUser(int userId) {
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
         if (unwrappedUser != null) {
@@ -176,7 +176,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean reactivateUser(Long userId) {
+    public boolean reactivateUser(int userId) {
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
         if (unwrappedUser != null) {

@@ -20,6 +20,7 @@ public interface AuthService {
     boolean verifyUser(String token);
     User findByEmail(String email);
     void sendVerificationEmail(User user);
-    boolean deactivateUser(Long userId);
-    boolean reactivateUser(Long userId);
+    boolean deactivateUser(int userId);
+
+    boolean reactivateUser(int userId);
 }
