@@ -55,6 +55,8 @@ public class UserController {
                         .build());
     }
 
+    @Operation(summary = "Get User Profile",
+            description = "Retrieve the profile information of the user specified by the userId.")
     @GetMapping("/profile/{userId}")
     public ResponseEntity<?> getUserProfile(@PathVariable int userId, HttpServletRequest httpRequest) {
         try {
@@ -68,6 +70,8 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Update User Profile",
+            description = "Update the profile information of the user specified by the userId")
     @PutMapping("/profile/{userId}")
     public ResponseEntity<?> updateUserProfile(
             @PathVariable int userId,
