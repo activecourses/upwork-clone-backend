@@ -4,7 +4,7 @@ import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.exception.TokenRefreshException;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.service.authentication.AuthService;
-import com.activecourses.upwork.service.authentication.RefreshTokenService;
+import com.activecourses.upwork.service.RefreshTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
