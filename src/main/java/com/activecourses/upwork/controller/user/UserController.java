@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -55,4 +56,18 @@ public class UserController {
                         .build());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping
+    public ResponseEntity <ResponseDto> DeleteUserbyID(
+            @RequestParam(value = "id", required = true ) Integer id
+    ){
+        try {
+            userService.deleteUserbyId(id);
+            ResponseDto responseDto = new ResponseDto(HttpStatus.OK,true,"User deleted successfully",null);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 }

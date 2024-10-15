@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -53,5 +55,14 @@ public class userServiceImpl implements UserService {
         userResponseDto.setTotalPages(pagedResult.getTotalPages());
         userResponseDto.setLast(pagedResult.isLast());
         return userResponseDto;
+
+
+    }
+    public String deleteUserbyId(Integer id){
+        if ( !userRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteById(id);
+        return "User deleted successfully";
     }
 }
