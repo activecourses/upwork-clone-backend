@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -59,6 +61,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).
                 orElseThrow(()->new UsernameNotFoundException("User Not Found"));
     }
-
-
+    @Override
+    public String deleteUserbyId(Integer id){
+        if ( !userRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteById(id);
+        return "User deleted successfully";
+    }
 }
