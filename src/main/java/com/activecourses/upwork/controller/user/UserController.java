@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @Tag(name = "User", description = "User API")
 @RestController
@@ -84,6 +86,20 @@ public class UserController {
                     .success(false)
                     .data(e.getMessage())
                     .build());
+        }
+
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping
+    public ResponseEntity <ResponseDto> DeleteUserbyID(
+            @RequestParam(value = "id", required = true ) Integer id
+    ){
+        try {
+            userService.deleteUserbyId(id);
+            ResponseDto responseDto = new ResponseDto(HttpStatus.OK,true,"User deleted successfully",null);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }

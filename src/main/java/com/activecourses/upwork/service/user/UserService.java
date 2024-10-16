@@ -7,5 +7,6 @@ import com.activecourses.upwork.model.User;
 public interface UserService {
     UserResponseDto getAllUsers(int pageNo, int pageSize, String sortBy, String sortDir);
     User findByEmail(String email);
+    String deleteUserbyId(Integer id);
 
 }
