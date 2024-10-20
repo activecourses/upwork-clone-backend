@@ -1,14 +1,15 @@
 package com.activecourses.upwork.service;
 
+import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.authentication.login.LoginRequestDto;
 import com.activecourses.upwork.dto.authentication.registration.RegistrationRequestDto;
 import com.activecourses.upwork.mapper.Mapper;
+import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.repository.role.RoleRepository;
 import com.activecourses.upwork.service.authentication.AuthServiceImpl;
 import com.activecourses.upwork.config.security.jwt.JwtService;
-import com.activecourses.upwork.service.RefreshTokenService;
 import com.activecourses.upwork.config.security.CustomUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.ResponseCookie;
 
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,22 +99,32 @@ class AuthServiceImplTest {
 
     @Test
     void login() {
-        LoginRequestDto loginRequestDto = new LoginRequestDto();
-        loginRequestDto.setEmail("am0103738@gmail.com");
-        loginRequestDto.setPassword("password123");
+        LoginRequestDto loginRequestDto = new LoginRequestDto("am0103738@gmail.com", "password123");
 
         User user = new User();
+        user.setId(1);
         user.setEmail("am0103738@gmail.com");
         user.setPassword("encodedPassword");
         user.setAccountEnabled(true);
         user.setAccountLocked(false);
 
+        UserDetails userDetails = mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn(user.getEmail());
+        when(userDetails.getPassword()).thenReturn(user.getPassword());
+
         when(userRepository.findByEmail("am0103738@gmail.com")).thenReturn(Optional.of(user));
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(mock(Authentication.class));
-        when(customUserDetailsService.loadUserByUsername("am0103738@gmail.com")).thenReturn(mock(UserDetails.class));
-        when(jwtService.generateJwtCookie(any(UserDetails.class))).thenReturn(mock(ResponseCookie.class));
-        when(refreshTokenService.createRefreshToken(anyInt())).thenReturn(mock(RefreshToken.class));
-        when(jwtService.generateRefreshJwtCookie(anyString())).thenReturn(mock(ResponseCookie.class));
+        when(customUserDetailsService.loadUserByUsername("am0103738@gmail.com")).thenReturn(user);
+
+        ResponseCookie jwtCookie = mock(ResponseCookie.class);
+        when(jwtService.generateJwtCookie(any(UserDetails.class))).thenReturn(jwtCookie);
+
+        RefreshToken refreshToken = mock(RefreshToken.class);
+        when(refreshTokenService.createRefreshToken(anyInt())).thenReturn(refreshToken);
+        when(refreshToken.getToken()).thenReturn("refreshToken");
+
+        ResponseCookie refreshJwtCookie = mock(ResponseCookie.class);
+        when(jwtService.generateRefreshJwtCookie(anyString())).thenReturn(refreshJwtCookie);
 
         ResponseDto responseDto = authService.login(loginRequestDto);
 
@@ -133,7 +145,7 @@ class AuthServiceImplTest {
         ResponseEntity<ResponseDto> responseEntity = authService.logout();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody().isSuccess());
+        assertTrue(Objects.requireNonNull(responseEntity.getBody()).isSuccess());
     }
 
     @Test
