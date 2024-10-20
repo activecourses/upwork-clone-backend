@@ -35,15 +35,7 @@ public class RoleController {
     public ResponseEntity<ResponseDto> addRole(@RequestBody Role role) {
         logger.info("Adding new role: {}", role.getName());
         Role createdRole = roleService.addRole(role);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.CREATED)
-                        .success(true)
-                        .data(createdRole)
-                        .build()
-                );
+        return buildResponseEntity(HttpStatus.CREATED, true, createdRole, null);
     }
 
     @Operation(
@@ -57,24 +49,8 @@ public class RoleController {
         logger.info("Removing role with id: {}", roleId);
         boolean success = roleService.removeRole(roleId);
         return success
-                ? ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
-                        .success(true)
-                        .data("Role removed successfully.")
-                        .build()
-                )
-                : ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.NOT_FOUND)
-                        .success(false)
-                        .error("Role not found.")
-                        .build()
-                );
+                ? buildResponseEntity(HttpStatus.OK, true, "Role removed successfully.", null)
+                : buildResponseEntity(HttpStatus.NOT_FOUND, false, null, "Role not found.");
     }
 
     @Operation(
@@ -87,27 +63,9 @@ public class RoleController {
     public ResponseEntity<ResponseDto> updateRole(@PathVariable int roleId, @RequestBody Role role) {
         logger.info("Updating role with id: {}", roleId);
         Role updatedRole = roleService.updateRole(roleId, role);
-        if (updatedRole != null) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(ResponseDto
-                            .builder()
-                            .status(HttpStatus.OK)
-                            .success(true)
-                            .data(updatedRole)
-                            .build()
-                    );
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(ResponseDto
-                            .builder()
-                            .status(HttpStatus.NOT_FOUND)
-                            .success(false)
-                            .error("Role not found.")
-                            .build()
-                    );
-        }
+        return updatedRole != null
+                ? buildResponseEntity(HttpStatus.OK, true, updatedRole, null)
+                : buildResponseEntity(HttpStatus.NOT_FOUND, false, null, "Role not found.");
     }
 
     @Operation(
@@ -120,15 +78,7 @@ public class RoleController {
     public ResponseEntity<ResponseDto> getAllRoles() {
         logger.info("Retrieving all roles");
         List<Role> roles = roleService.getAllRoles();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ResponseDto
-                        .builder()
-                        .status(HttpStatus.OK)
-                        .success(true)
-                        .data(roles)
-                        .build()
-                );
+        return buildResponseEntity(HttpStatus.OK, true, roles, null);
     }
 
     @Operation(
@@ -138,21 +88,24 @@ public class RoleController {
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/assign-roles")
-    public ResponseDto assignRolesToUser(@PathVariable int id, @RequestBody Map<String, Object> roles) {
+    public ResponseEntity<ResponseDto> assignRolesToUser(@PathVariable int id, @RequestBody Map<String, Object> roles) {
         logger.info("Assigning roles to user with id: {}", id);
         boolean success = roleService.assignRolesToUser(id, roles);
-        if (success) {
-            return ResponseDto.builder()
-                    .status(HttpStatus.OK)
-                    .success(true)
-                    .data("Roles assigned successfully.")
-                    .build();
-        } else {
-            return ResponseDto.builder()
-                    .status(HttpStatus.NOT_FOUND)
-                    .success(false)
-                    .error("User not found.")
-                    .build();
-        }
+        return success
+                ? buildResponseEntity(HttpStatus.OK, true, "Roles assigned successfully.", null)
+                : buildResponseEntity(HttpStatus.NOT_FOUND, false, null, "User not found.");
+    }
+
+    private ResponseEntity<ResponseDto> buildResponseEntity(HttpStatus status, boolean success, Object data, Object error) {
+        return ResponseEntity
+                .status(status)
+                .body(ResponseDto
+                        .builder()
+                        .status(status)
+                        .success(success)
+                        .data(data)
+                        .error(error)
+                        .build()
+                );
     }
 }
