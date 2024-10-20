@@ -27,7 +27,6 @@ import java.util.Map;
 @RequestMapping("/api/auth/")
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Operation(
