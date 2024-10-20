@@ -22,9 +22,9 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
-      expiration: 60000 # 1 minute, for testing
+      expiration: 600000 # 10 minutes
       refresh-token:
-        expiration: 180000 # 3 minutes, for testing
+        expiration: 604800000 # 7 days
       cookie:
         jwt-cookie-name: ${JWT_COOKIE_NAME}
         jwt-refresh-cookie-name: ${JWT_REFRESH_COOKIE_NAME}
