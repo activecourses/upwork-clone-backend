@@ -75,9 +75,11 @@ public class RefreshTokenService {
             return buildBadRequestResponse("Refresh Token is empty!");
         }
     }
+
     private String getRefreshTokenFromRequest(HttpServletRequest request) {
         return jwtService.getJwtRefreshFromCookies(request);
     }
+
     private String getTokenFromRequest(HttpServletRequest request) {
         return jwtService.getJwtFromCookies(request);
     }
@@ -117,7 +119,7 @@ public class RefreshTokenService {
     public void verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new signin request");
+            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please sign in again to obtain a new refresh token.");
         }
 
     }
