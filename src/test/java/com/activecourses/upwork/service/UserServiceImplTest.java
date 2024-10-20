@@ -1,5 +1,6 @@
 package com.activecourses.upwork.service;
 
+import com.activecourses.upwork.dto.user.UserDto;
 import com.activecourses.upwork.dto.user.UserResponseDto;
 import com.activecourses.upwork.mapper.user.UserDtoMapper;
 import com.activecourses.upwork.model.User;
@@ -56,6 +57,15 @@ class UserServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
 
         when(userRepository.findAll(any(Pageable.class))).thenReturn(pagedResult);
+
+        UserDto userDto1 = new UserDto();
+        userDto1.setId(1);
+
+        UserDto userDto2 = new UserDto();
+        userDto2.setId(2);
+
+        when(userDtoMapper.mapTo(user1)).thenReturn(userDto1);
+        when(userDtoMapper.mapTo(user2)).thenReturn(userDto2);
 
         UserResponseDto userResponseDto = userService.getAllUsers(0, 10, "id", "asc");
 
