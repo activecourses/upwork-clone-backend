@@ -1,8 +1,8 @@
-package com.activecourses.upwork.controller.user;
+package com.activecourses.upwork.controller.role;
 
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.model.Role;
-import com.activecourses.upwork.service.user.RoleService;
+import com.activecourses.upwork.service.role.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Role", description = "Role Management API")
 @RestController
@@ -55,27 +56,25 @@ public class RoleController {
     public ResponseEntity<ResponseDto> removeRole(@PathVariable int roleId) {
         logger.info("Removing role with id: {}", roleId);
         boolean success = roleService.removeRole(roleId);
-        if (success) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(ResponseDto
-                            .builder()
-                            .status(HttpStatus.OK)
-                            .success(true)
-                            .data("Role removed successfully.")
-                            .build()
-                    );
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(ResponseDto
-                            .builder()
-                            .status(HttpStatus.NOT_FOUND)
-                            .success(false)
-                            .error("Role not found.")
-                            .build()
-                    );
-        }
+        return success
+                ? ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto
+                        .builder()
+                        .status(HttpStatus.OK)
+                        .success(true)
+                        .data("Role removed successfully.")
+                        .build()
+                )
+                : ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ResponseDto
+                        .builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .success(false)
+                        .error("Role not found.")
+                        .build()
+                );
     }
 
     @Operation(
@@ -130,5 +129,30 @@ public class RoleController {
                         .data(roles)
                         .build()
                 );
+    }
+
+    @Operation(
+            summary = "Assign roles to users",
+            description = "Assign roles to users, accessible only by admins",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/assign-roles")
+    public ResponseDto assignRolesToUser(@PathVariable int id, @RequestBody Map<String, Object> roles) {
+        logger.info("Assigning roles to user with id: {}", id);
+        boolean success = roleService.assignRolesToUser(id, roles);
+        if (success) {
+            return ResponseDto.builder()
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .data("Roles assigned successfully.")
+                    .build();
+        } else {
+            return ResponseDto.builder()
+                    .status(HttpStatus.NOT_FOUND)
+                    .success(false)
+                    .error("User not found.")
+                    .build();
+        }
     }
 }

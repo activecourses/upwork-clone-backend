@@ -9,7 +9,6 @@ import com.activecourses.upwork.mapper.Mapper;
 import com.activecourses.upwork.model.RefreshToken;
 import com.activecourses.upwork.model.User;
 import com.activecourses.upwork.model.UserProfile;
-import com.activecourses.upwork.model.Role;
 import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.repository.role.RoleRepository;
 import com.activecourses.upwork.config.security.jwt.JwtService;
@@ -19,8 +18,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                     .error("Account is disabled.")
                     .build();
         }
-        
+
         if (user.isAccountLocked()) {
             logger.warn("Account is locked for user: {}", loginRequestDto.getEmail());
             return ResponseDto
@@ -153,13 +150,10 @@ public class AuthServiceImpl implements AuthService {
         logger.info("Verifying user with token: {}", token);
         Optional<User> user = userRepository.findByVerificationToken(token);
         User unwrappedUser = unwrapUser(user);
-        if (unwrappedUser != null) {
-            unwrappedUser.setAccountEnabled(true);
-            unwrappedUser.setVerificationToken(null); // Clear the token
-            userRepository.save(unwrappedUser);
-            return true;
-        }
-        return false;
+        unwrappedUser.setAccountEnabled(true);
+        unwrappedUser.setVerificationToken(null); // Clear the token
+        userRepository.save(unwrappedUser);
+        return true;
     }
 
     @Override
@@ -180,18 +174,15 @@ public class AuthServiceImpl implements AuthService {
         message.setText("Click the link to verify your email: " + verificationLink);
         mailSender.send(message);
     }
-    
+
     @Override
     public boolean deactivateUser(int userId) {
         logger.info("Deactivating user with id: {}", userId);
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
-        if (unwrappedUser != null) {
-            unwrappedUser.setAccountEnabled(false);
-            userRepository.save(unwrappedUser);
-            return true;
-        }
-        return false;
+        unwrappedUser.setAccountEnabled(false);
+        userRepository.save(unwrappedUser);
+        return true;
     }
 
     @Override
@@ -199,29 +190,9 @@ public class AuthServiceImpl implements AuthService {
         logger.info("Reactivating user with id: {}", userId);
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = unwrapUser(user);
-        if (unwrappedUser != null) {
-            unwrappedUser.setAccountEnabled(true);
-            userRepository.save(unwrappedUser);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean assignRolesToUser(int userId, Map<String, Object> roles) {
-        logger.info("Assigning roles to user with id: {}", userId);
-        Optional<User> user = userRepository.findById(userId);
-        User unwrappedUser = unwrapUser(user);
-        if (unwrappedUser != null) {
-            List<Role> roleList = roles.keySet().stream()
-                    .map(roleName -> roleRepository.findByName(roleName)
-                            .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
-                    .collect(Collectors.toList());
-            unwrappedUser.setRoles(roleList);
-            userRepository.save(unwrappedUser);
-            return true;
-        }
-        return false;
+        unwrappedUser.setAccountEnabled(true);
+        userRepository.save(unwrappedUser);
+        return true;
     }
 
     static User unwrapUser(Optional<User> entity) {

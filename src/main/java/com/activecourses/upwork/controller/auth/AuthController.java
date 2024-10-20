@@ -54,7 +54,7 @@ public class AuthController {
             description = "Login",
             security = @SecurityRequirement(name = "")
     )
-    @PostMapping("login") 
+    @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         logger.info("User login attempt with email: {}", loginRequestDto.getEmail());
         ResponseDto responseDto = authService.login(loginRequestDto);
@@ -67,9 +67,9 @@ public class AuthController {
     }
 
     @Operation(
-        summary = "Deactivate user",
-        description = "Deactivate user",
-        security = @SecurityRequirement(name = "bearerAuth")
+            summary = "Deactivate user",
+            description = "Deactivate user",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/deactivate")
@@ -125,30 +125,5 @@ public class AuthController {
     public ResponseEntity<?> logout() {
         logger.info("User logout attempt");
         return authService.logout();
-    }
-
-    @Operation(
-            summary = "Assign roles to users",
-            description = "Assign roles to users, accessible only by admins",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{id}/assign-roles")
-    public ResponseDto assignRolesToUser(@PathVariable int id, @RequestBody Map<String, Object> roles) {
-        logger.info("Assigning roles to user with id: {}", id);
-        boolean success = authService.assignRolesToUser(id, roles);
-        if (success) {
-            return ResponseDto.builder()
-                    .status(HttpStatus.OK)
-                    .success(true)
-                    .data("Roles assigned successfully.")
-                    .build();
-        } else {
-            return ResponseDto.builder()
-                    .status(HttpStatus.NOT_FOUND)
-                    .success(false)
-                    .error("User not found.")
-                    .build();
-        }
     }
 }

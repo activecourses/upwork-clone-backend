@@ -7,8 +7,7 @@ import com.activecourses.upwork.model.Role;
 import com.activecourses.upwork.repository.user.UserRepository;
 import com.activecourses.upwork.repository.role.RoleRepository;
 import com.activecourses.upwork.service.authentication.AuthServiceImpl;
-import com.activecourses.upwork.service.user.RoleService;
-import com.activecourses.upwork.service.user.RoleServiceImpl;
+import com.activecourses.upwork.service.role.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -96,7 +95,7 @@ class AuthServiceTest {
         when(roleRepository.findByName("ROLE_ADMIN")).thenReturn(Optional.of(adminRole));
         when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(userRole));
 
-        boolean success = userService.assignRolesToUser(userId, roles);
+        boolean success = roleService.assignRolesToUser(userId, roles);
 
         assertTrue(success);
         assertEquals(2, user.getRoles().size());
