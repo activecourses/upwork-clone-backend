@@ -37,3 +37,13 @@ jobs:
         path: |
           build/reports/tests/test/
           build/test-results/test/
+
+    - name: Update status check
+      if: success()
+      run: echo "Tests passed" > status.txt || echo "Tests failed" > status.txt
+
+    - name: Upload status check
+      uses: actions/upload-artifact@v4
+      with:
+        name: status-check
+        path: status.txt

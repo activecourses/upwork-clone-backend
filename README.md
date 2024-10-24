@@ -1,5 +1,7 @@
 # Upwork-Clone
 
+![Build Status](https://github.com/AhmedMohamedAbdelaty/Upwork/actions/workflows/gradle.yml/badge.svg)
+
 A platform connecting freelancers and clients for job postings, proposals, and real-time chat.
 
 ## Table of Contents
