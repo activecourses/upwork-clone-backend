@@ -26,22 +26,22 @@ import java.util.Map;
 public class JwtService {
     private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
-    @Value("${application.security.jwt.secret-key}")
+    @Value("${application.security.jwt.secret_key}")
     private String secretKey;
 
     @Value("${application.security.jwt.expiration}")
     private long jwtExpirationTime;
 
-    @Value("${application.security.jwt.refresh-token.expiration}")
+    @Value("${application.security.jwt.refresh_token.expiration}")
     private long refreshJwtExpirationTime;
 
-    @Value("${application.security.jwt.cookie.jwt-cookie-name}")
+    @Value("${application.security.jwt.cookie.jwt_cookie_name}")
     private String jwtCookie;
 
-    @Value("${application.security.jwt.cookie.jwt-refresh-cookie-name}")
+    @Value("${application.security.jwt.cookie.jwt_refresh_cookie_name}")
     private String jwtRefreshCookie;
 
-    @Value("${application.security.jwt.cookie.max-age}")
+    @Value("${application.security.jwt.cookie.max_age}")
     private int maxAge;
 
     public ResponseCookie generateJwtCookie(User userPrincipal) {
