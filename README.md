@@ -7,7 +7,7 @@ A platform connecting freelancers and clients for job postings, proposals, and r
 ## Table of Contents
 - [Setup](#setup)
     - [Database: PostgreSQL](#database-postgresql)
-    - [Flyway](#flyway)
+    - [Docker Compose](#docker-compose)
 - [API Endpoints](#api-endpoints)
     - [Authentication](#authentication)
     - [User Management](#user-management)
@@ -47,7 +47,34 @@ Create a `src/main/resources/env.properties` file with the following content:
 Replace `<username>`, `<password>`, and `<database-name>` with the values you used when creating the PostgreSQL container.
 </details>
 
-### Flyway
+### Docker Compose
+
+Docker Compose is used to manage multi-container Docker applications. The `docker-compose.yml` file contains the configuration for the PostgreSQL and application services.
+
+<details>
+   <summary>Build and run the Docker containers:</summary>
+
+   ```bash
+   docker-compose up --build
+   ```
+This command will build the Docker images and start the containers.
+
+</details>
+
+<details>
+   <summary>Stop and remove the Docker containers:</summary>
+
+   ```bash
+   docker-compose down
+   ```
+This command will stop and remove the Docker containers.
+
+   <summary>Note:</summary>
+
+The `src/main/resources/env.properties` file contains environment variables for database configuration. Make sure to update this file with your desired values.
+</details>
+
+### Note on Flyway
 
 Flyway is used to manage database migrations. The SQL scripts are located in `src/main/resources/db/migration`. When you run the application, Flyway will automatically create the necessary tables in the database.
 
