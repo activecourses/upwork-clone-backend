@@ -59,6 +59,8 @@ Docker Compose is used to manage multi-container Docker applications. The `docke
    ```
 This command will build the Docker images and start the containers.
 
+</details>
+
 <details>
    <summary>Stop and remove the Docker containers:</summary>
 
@@ -67,7 +69,6 @@ This command will build the Docker images and start the containers.
    ```
 This command will stop and remove the Docker containers.
 
-<details>
    <summary>Note:</summary>
 
 The `src/main/resources/env.properties` file contains environment variables for database configuration. Make sure to update this file with your desired values.
