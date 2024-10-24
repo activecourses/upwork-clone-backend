@@ -3,7 +3,7 @@ package com.activecourses.upwork.controller.user;
 import com.activecourses.upwork.dto.ResponseDto;
 import com.activecourses.upwork.dto.user.UserProfileDto;
 import com.activecourses.upwork.dto.user.UserResponseDto;
-import com.activecourses.upwork.service.user.UserProfileService;
+import com.activecourses.upwork.service.user.profile.UserProfileService;
 import com.activecourses.upwork.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,10 +30,10 @@ public class UserController {
     @Operation(summary = "Get all users",
             description = "Retrieve a paginated list of all users. Only accessible by users with the ROLE_ADMIN role.",
             parameters = {
-                    @Parameter(name = "pageNo", in = ParameterIn.QUERY, description = "Page number", required = false, schema = @Schema(type = "integer", defaultValue = "0")),
-                    @Parameter(name = "pageSize", in = ParameterIn.QUERY, description = "Page size", required = false, schema = @Schema(type = "integer", defaultValue = "10")),
-                    @Parameter(name = "sortBy", in = ParameterIn.QUERY, description = "Sort by", required = false, schema = @Schema(type = "string", defaultValue = "id")),
-                    @Parameter(name = "sortDir", in = ParameterIn.QUERY, description = "Sort direction", required = false, schema = @Schema(type = "string", defaultValue = "asc"))
+                    @Parameter(name = "pageNo", in = ParameterIn.QUERY, description = "Page number", schema = @Schema(type = "integer", defaultValue = "0")),
+                    @Parameter(name = "pageSize", in = ParameterIn.QUERY, description = "Page size", schema = @Schema(type = "integer", defaultValue = "10")),
+                    @Parameter(name = "sortBy", in = ParameterIn.QUERY, description = "Sort by", schema = @Schema(type = "string", defaultValue = "id")),
+                    @Parameter(name = "sortDir", in = ParameterIn.QUERY, description = "Sort direction", schema = @Schema(type = "string", defaultValue = "asc"))
             }
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -77,7 +77,7 @@ public class UserController {
             @PathVariable int userId,
             @RequestBody @Valid UserProfileDto updateRequest) {
         try {
-            return userProfileService.UpdateUserProfile(userId,updateRequest);
+            return userProfileService.UpdateUserProfile(userId, updateRequest);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseDto.builder()
                     .status(HttpStatus.BAD_REQUEST)

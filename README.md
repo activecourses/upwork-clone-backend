@@ -1,5 +1,7 @@
 # Upwork-Clone
 
+![Build Status](https://github.com/AhmedMohamedAbdelaty/Upwork/actions/workflows/gradle.yml/badge.svg)
+
 A platform connecting freelancers and clients for job postings, proposals, and real-time chat.
 
 ## Table of Contents
@@ -11,6 +13,7 @@ A platform connecting freelancers and clients for job postings, proposals, and r
     - [User Management](#user-management)
     - [Password Management](#password-management)
     - [Token Management](#token-management)
+    - [Role Management](#role-management)
     - [Test Endpoints](#test-endpoints)
 - [Swagger UI](#swagger-ui)
 - [To-Do](#to-do)
@@ -155,6 +158,7 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
     - `id`: The ID of the user to reactivate
 - **Response:** A `ResponseDto` object containing the result of the operation.
 </details>
+
 <details>
    <summary>Get user profile</summary>
 
@@ -162,15 +166,15 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
 - **Method:** `GET`
 - **Description:** Retrieve the profile information for a specific user.
 - **Path Parameters:**
-  - `id` (required): The ID of the user whose profile is to be retrieved.
-    - **Response:**
-      - **Status Code:** `200 OK`
-      - **Body:**
-        ```json
-        {
-        "status": "OK",
-        "success": true,
-        "data": {
+  - `userId` (required): The ID of the user whose profile is to be retrieved.
+- **Response:**
+  - **Status Code:** `200 OK`
+  - **Body:**
+    ```json
+    {
+      "status": "OK",
+      "success": true,
+      "data": {
         "id": 160,
         "firstName": "Teddy",
         "lastName": "Johnson",
@@ -178,11 +182,12 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
         "description": null,
         "hourlyRate": null,
         "location": null
-          },
-        "error": null
-        }
-        ```
+      },
+      "error": null
+    }
+    ```
 </details>
+
 <details>
    <summary>Update user profile</summary>
 
@@ -191,28 +196,28 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
 - **Description:** Update the profile information for a specific user.
 - **Path Parameters:**
   - `id` (required): The ID of the user whose currently logged in.
-    - **Request Body:**
-      - **Content-Type:** `application/json`
-        - **Body Example:**
-          ```json
-          {
-            "id": 160,
-            "firstName": "string",
-            "lastName": "string",
-            "title": "string",
-            "description": "string",
-            "hourlyRate": 0,
-            "location": "string"
-          }
-          ```
+- **Request Body:**
+  - **Content-Type:** `application/json`
+  - **Body Example:**
+    ```json
+    {
+      "id": 160,
+      "firstName": "string",
+      "lastName": "string",
+      "title": "string",
+      "description": "string",
+      "hourlyRate": 0,
+      "location": "string"
+    }
+    ```
 - **Response:**
   - **Status Code:** `200 OK`
   - **Body Example:**
     ```json
-        {
-        "status": "OK",
-        "success": true,
-        "data": {
+    {
+      "status": "OK",
+      "success": true,
+      "data": {
         "id": 160,
         "firstName": "string",
         "lastName": "string",
@@ -220,10 +225,9 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
         "description": "string",
         "hourlyRate": 0,
         "location": "string"
-          },
-        "error": null
-        }
-    
+      },
+      "error": null
+    }
     ```
 
 </details>
@@ -299,6 +303,128 @@ Flyway is used to manage database migrations. The SQL scripts are located in `sr
 - **Path Parameters:**
     - `id`: The ID of the token to delete
 - **Response:** An object indicating the result of the operation.
+</details>
+
+### Role Management
+
+<details>
+   <summary>Add a new role</summary>
+
+- **URL:** `/api/roles/add`
+- **Method:** `POST`
+- **Description:** Add a new role, accessible only by admins.
+- **Request Body:**
+  ```json
+  {
+    "name": "string"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "status": "CREATED",
+    "success": true,
+    "data": {
+      "id": 1,
+      "name": "string"
+    },
+    "error": null
+  }
+  ```
+</details>
+
+<details>
+   <summary>Remove a role</summary>
+
+- **URL:** `/api/roles/remove/{roleId}`
+- **Method:** `DELETE`
+- **Description:** Remove a role, accessible only by admins.
+- **Path Parameters:**
+  - `roleId` (required): The ID of the role to remove.
+- **Response:**
+  ```json
+  {
+    "status": "OK",
+    "success": true,
+    "data": "Role removed successfully.",
+    "error": null
+  }
+  ```
+</details>
+
+<details>
+   <summary>Update a role</summary>
+
+- **URL:** `/api/roles/update/{roleId}`
+- **Method:** `PUT`
+- **Description:** Update a role, accessible only by admins.
+- **Path Parameters:**
+  - `roleId` (required): The ID of the role to update.
+- **Request Body:**
+  ```json
+  {
+    "name": "string"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "status": "OK",
+    "success": true,
+    "data": {
+      "id": 1,
+      "name": "string"
+    },
+    "error": null
+  }
+  ```
+</details>
+
+<details>
+   <summary>Get all roles</summary>
+
+- **URL:** `/api/roles/all`
+- **Method:** `GET`
+- **Description:** Retrieve a list of all roles, accessible only by admins.
+- **Response:**
+  ```json
+  {
+    "status": "OK",
+    "success": true,
+    "data": [
+      {
+        "id": 1,
+        "name": "string"
+      }
+    ],
+    "error": null
+  }
+  ```
+</details>
+
+<details>
+   <summary>Assign roles to users</summary>
+
+- **URL:** `/api/roles/{id}/assign-roles`
+- **Method:** `POST`
+- **Description:** Assign roles to users, accessible only by admins.
+- **Path Parameters:**
+  - `id` (required): The ID of the user to assign roles to.
+- **Request Body:**
+  ```json
+  {
+    "roles": ["string"]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "status": "OK",
+    "success": true,
+    "data": "Roles assigned successfully.",
+    "error": null
+  }
+  ```
 </details>
 
 ### Test Endpoints

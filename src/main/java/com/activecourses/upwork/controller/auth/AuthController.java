@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -25,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/api/auth/")
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Operation(
             summary = "Register a new user",
@@ -34,6 +36,7 @@ public class AuthController {
     )
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerUser(@Valid @RequestBody RegistrationRequestDto registrationRequestDto) {
+        logger.info("Registering user with email: {}", registrationRequestDto.getEmail());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseDto
@@ -50,8 +53,9 @@ public class AuthController {
             description = "Login",
             security = @SecurityRequirement(name = "")
     )
-    @PostMapping("login") 
+    @PostMapping("login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        logger.info("User login attempt with email: {}", loginRequestDto.getEmail());
         ResponseDto responseDto = authService.login(loginRequestDto);
         Map<String, ResponseCookie> cookies = (Map<String, ResponseCookie>) responseDto.getData();
 
@@ -62,13 +66,14 @@ public class AuthController {
     }
 
     @Operation(
-        summary = "Deactivate user",
-        description = "Deactivate user",
-        security = @SecurityRequirement(name = "")
+            summary = "Deactivate user",
+            description = "Deactivate user",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/deactivate")
     public ResponseDto deactivateUser(@PathVariable int id) {
+        logger.info("Deactivating user with id: {}", id);
         boolean success = authService.deactivateUser(id);
         if (success) {
             return ResponseDto.builder()
@@ -88,11 +93,12 @@ public class AuthController {
     @Operation(
             summary = "Reactivate user",
             description = "Reactivate user",
-            security = @SecurityRequirement(name = "")
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/reactivate")
     public ResponseDto reactivateUser(@PathVariable int id) {
+        logger.info("Reactivating user with id: {}", id);
         boolean success = authService.reactivateUser(id);
         if (success) {
             return ResponseDto.builder()
@@ -116,6 +122,7 @@ public class AuthController {
     )
     @PostMapping("logout")
     public ResponseEntity<?> logout() {
+        logger.info("User logout attempt");
         return authService.logout();
     }
 }
