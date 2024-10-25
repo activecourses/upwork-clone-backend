@@ -8,7 +8,7 @@ spring:
     driver-class-name: "org.postgresql.Driver"
   jpa:
     hibernate:
-      ddl-auto: validate # validate to let Flyway manage the schema
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -21,14 +21,14 @@ spring:
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET_KEY}
-      expiration: 600000 # 10 minutes
+      secret_key: ${application.security.jwt.secret_key}
+      expiration: ${application.security.jwt.expiration}
       refresh-token:
-        expiration: 604800000 # 7 days
+        expiration: ${application.security.jwt.refresh_token.expiration}
       cookie:
-        jwt-cookie-name: ${JWT_COOKIE_NAME}
-        jwt-refresh-cookie-name: ${JWT_REFRESH_COOKIE_NAME}
-        max-age: ${JWT_COOKIE_MAX_AGE}
+        jwt_cookie_name: ${application.security.jwt.cookie.jwt_cookie_name}
+        jwt_refresh_cookie_name: ${application.security.jwt.cookie.jwt_refresh_cookie_name}
+        max_age: ${application.security.jwt.cookie.max_age}
 
 springdoc:
   api-docs:
