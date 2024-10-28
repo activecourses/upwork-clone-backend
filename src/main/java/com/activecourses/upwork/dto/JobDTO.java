@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class JobDTO {
-    private Integer id;
+    private Integer jobId;
     private String title;
     private String description;
     private BigDecimal budget;
