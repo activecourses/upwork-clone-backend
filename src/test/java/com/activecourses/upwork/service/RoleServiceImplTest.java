@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -108,8 +109,7 @@ class RoleServiceImplTest {
     void assignRolesToUser() {
         int userId = 1;
         Map<String, Object> roles = new HashMap<>();
-        roles.put("ROLE_ADMIN", null);
-        roles.put("ROLE_USER", null);
+        roles.put("roles", Arrays.asList("ROLE_ADMIN", "ROLE_USER")); // Updated to use a list of role names
 
         User user = new User();
         user.setId(userId);
@@ -131,4 +131,5 @@ class RoleServiceImplTest {
         assertTrue(user.getRoles().contains(adminRole));
         assertTrue(user.getRoles().contains(userRole));
     }
+
 }
