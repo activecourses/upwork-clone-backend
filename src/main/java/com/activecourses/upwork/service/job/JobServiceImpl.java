@@ -19,16 +19,22 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
-    private JobMapper jobMapper;
+    private final JobMapper jobMapper;
 
     @Override
     public Job createJob(JobDTO jobDTO) {
-        int clientId = authService.getCurrentUserId();
-        User client = userRepository.findById(clientId).orElseThrow(() -> new RuntimeException("User not found"));
+        Integer clientId = authService.getCurrentUserId();
+        if (clientId == null) {
+            throw new IllegalStateException("User is not authenticated");
+        }
+
+        User client = userRepository.findById(clientId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + clientId));
 
         Job job = jobMapper.mapFrom(jobDTO);
         job.setClient(client);
 
         return jobRepository.save(job);
     }
+
 }
