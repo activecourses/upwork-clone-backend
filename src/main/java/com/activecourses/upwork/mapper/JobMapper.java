@@ -1,14 +1,17 @@
 package com.activecourses.upwork.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.activecourses.upwork.dto.JobDTO;
 import com.activecourses.upwork.model.Job;
 
+@Component
 public class JobMapper implements Mapper<Job, JobDTO> {
 
     @Override
     public JobDTO mapTo(Job job) {
         JobDTO jobDTO = new JobDTO();
-        jobDTO.setId(job.getJobId());
+        jobDTO.setJobId(job.getJobId());
         jobDTO.setTitle(job.getTitle());
         jobDTO.setDescription(job.getDescription());
         jobDTO.setBudget(job.getBudget());
@@ -21,7 +24,7 @@ public class JobMapper implements Mapper<Job, JobDTO> {
     @Override
     public Job mapFrom(JobDTO jobDTO) {
         Job job = new Job();
-        job.setJobId(jobDTO.getId());
+        job.setJobId(jobDTO.getJobId());
         job.setTitle(jobDTO.getTitle());
         job.setDescription(jobDTO.getDescription());
         job.setBudget(jobDTO.getBudget());
