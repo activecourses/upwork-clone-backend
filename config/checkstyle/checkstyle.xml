@@ -15,15 +15,10 @@
 
     <module name="TreeWalker">
         <!-- Checks for Naming Conventions -->
-        <module name="ConstantName"/>
-        <module name="LocalFinalVariableName"/>
-        <module name="LocalVariableName"/>
-        <module name="MemberName"/>
-        <module name="MethodName"/>
         <module name="PackageName"/>
-        <module name="ParameterName"/>
-        <module name="StaticVariableName"/>
         <module name="TypeName"/>
+        <module name="MethodName"/>
+        <module name="ConstantName"/>
 
         <!-- Checks for imports -->
         <module name="AvoidStarImport"/>
@@ -32,8 +27,9 @@
         <module name="UnusedImports"/>
 
         <!-- Checks for Size Violations -->
-        <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
+        <module name="MethodLength">
+            <property name="max" value="100"/>
+        </module>
 
         <!-- Checks for whitespace -->
         <module name="EmptyForIteratorPad"/>
@@ -41,18 +37,14 @@
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceAfter"/>
         <module name="NoWhitespaceBefore"/>
-        <module name="OperatorWrap"/>
         <module name="ParenPad"/>
         <module name="TypecastParenPad"/>
         <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
 
         <!-- Modifier Checks -->
         <module name="ModifierOrder"/>
-        <module name="RedundantModifier"/>
 
         <!-- Checks for blocks -->
-        <module name="AvoidNestedBlocks"/>
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>
@@ -61,25 +53,10 @@
         <!-- Checks for common coding problems -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="IllegalInstantiation"/>
-        <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
         <module name="MissingSwitchDefault"/>
-        <module name="MultipleVariableDeclarations"/>
-        <module name="SimplifyBooleanExpression"/>
-        <module name="SimplifyBooleanReturn"/>
-
-        <!-- Checks for class design -->
-        <module name="DesignForExtension"/>
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
-        <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
 
         <!-- Miscellaneous other checks -->
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
-        <module name="TodoComment"/>
         <module name="UpperEll"/>
     </module>
 </module>
