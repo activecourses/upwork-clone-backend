@@ -30,10 +30,18 @@ public class UserController {
     @Operation(summary = "Get all users",
             description = "Retrieve a paginated list of all users. Only accessible by users with the ROLE_ADMIN role.",
             parameters = {
-                    @Parameter(name = "pageNo", in = ParameterIn.QUERY, description = "Page number", schema = @Schema(type = "integer", defaultValue = "0")),
-                    @Parameter(name = "pageSize", in = ParameterIn.QUERY, description = "Page size", schema = @Schema(type = "integer", defaultValue = "10")),
-                    @Parameter(name = "sortBy", in = ParameterIn.QUERY, description = "Sort by", schema = @Schema(type = "string", defaultValue = "id")),
-                    @Parameter(name = "sortDir", in = ParameterIn.QUERY, description = "Sort direction", schema = @Schema(type = "string", defaultValue = "asc"))
+                    @Parameter(name = "pageNo", in = ParameterIn.QUERY,
+                            description = "Page number",
+                            schema = @Schema(type = "integer", defaultValue = "0")),
+                    @Parameter(name = "pageSize", in = ParameterIn.QUERY,
+                            description = "Page size",
+                            schema = @Schema(type = "integer", defaultValue = "10")),
+                    @Parameter(name = "sortBy", in = ParameterIn.QUERY,
+                            description = "Sort by",
+                            schema = @Schema(type = "string", defaultValue = "id")),
+                    @Parameter(name = "sortDir", in = ParameterIn.QUERY,
+                            description = "Sort direction",
+                            schema = @Schema(type = "string", defaultValue = "asc"))
             }
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")

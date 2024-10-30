@@ -96,7 +96,10 @@ public class RoleController {
                 : buildResponseEntity(HttpStatus.NOT_FOUND, false, null, "User not found.");
     }
 
-    private ResponseEntity<ResponseDto> buildResponseEntity(HttpStatus status, boolean success, Object data, Object error) {
+    private ResponseEntity<ResponseDto> buildResponseEntity(HttpStatus status,
+                                                            boolean success,
+                                                            Object data,
+                                                            Object error) {
         return ResponseEntity
                 .status(status)
                 .body(ResponseDto

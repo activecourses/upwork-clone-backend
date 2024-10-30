@@ -70,7 +70,11 @@ public class JwtService {
     }
 
     public ResponseCookie getCleanJwtRefreshCookie() {
-        return ResponseCookie.from(jwtRefreshCookie, "").path("/api/auth/refresh-token").maxAge(0).httpOnly(true).build();
+        return ResponseCookie.from(jwtRefreshCookie, "")
+                .path("/api/auth/refresh-token")
+                .maxAge(0)
+                .httpOnly(true)
+                .build();
     }
 
     public String generateAccessToken(UserDetails userDetails) {
