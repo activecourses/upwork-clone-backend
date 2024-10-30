@@ -10,7 +10,7 @@ plugins {
 checkstyle {
     toolVersion = "10.8.0"
     configFile = file("config/checkstyle/checkstyle.xml")
-    maxWarnings = 30
+    maxWarnings = 0
 }
 
 tasks.withType(Checkstyle).configureEach {
