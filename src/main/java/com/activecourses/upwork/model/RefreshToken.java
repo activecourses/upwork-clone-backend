@@ -32,10 +32,10 @@ public class RefreshToken {
 
     @Override
     public String toString() {
-        return "RefreshToken{" +
-               "id=" + id +
-               ", token='" + token + '\'' +
-               ", expiryDate=" + expiryDate +
-               '}';
+        return "RefreshToken{"
+               + "id=" + id
+               + ", token='" + token + '\''
+               + ", expiryDate=" + expiryDate
+               + '}';
     }
 }
