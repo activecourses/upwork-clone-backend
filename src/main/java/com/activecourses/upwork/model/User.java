@@ -66,7 +66,7 @@ public class User implements UserDetails, Principal {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true)
     private RefreshToken refreshToken;
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfile userProfile;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

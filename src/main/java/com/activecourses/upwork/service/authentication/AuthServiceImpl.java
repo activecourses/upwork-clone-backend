@@ -92,11 +92,15 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                        loginRequestDto.getEmail(),
+                        loginRequestDto.getPassword()
+                ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequestDto.getEmail());
+        UserDetails userDetails = customUserDetailsService
+                .loadUserByUsername(loginRequestDto.getEmail());
 
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(userDetails);
 
@@ -104,7 +108,8 @@ public class AuthServiceImpl implements AuthService {
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userId);
 
-        ResponseCookie refreshJwtCookie = jwtService.generateRefreshJwtCookie(refreshToken.getToken());
+        ResponseCookie refreshJwtCookie = jwtService
+                .generateRefreshJwtCookie(refreshToken.getToken());
 
         return ResponseDto
                 .builder()
@@ -117,7 +122,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<ResponseDto> logout() {
         logger.info("User logout attempt");
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
         if (!principal.toString().equals("anonymousUser")) {
             int userId = ((User) principal).getId();
             refreshTokenService.deleteByUserId(userId);
@@ -166,7 +172,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void sendVerificationEmail(User user) {
         logger.info("Sending verification email to: {}", user.getEmail());
-        String verificationLink = "http://localhost:8080/api/users/verify?token=" + user.getVerificationToken();
+        String verificationLink = "http://localhost:8080/api/users/verify?token="
+                                  + user.getVerificationToken();
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
@@ -207,7 +214,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     static User unwrapUser(Optional<User> entity) {
-        if (entity.isPresent()) return entity.get();
-        else throw new UnsupportedOperationException("Unimplemented method 'unwrapUser'");
+        if (entity.isPresent()) {
+            return entity.get();
+        } else {
+            throw new UnsupportedOperationException("Unimplemented method 'unwrapUser'");
+        }
     }
 }

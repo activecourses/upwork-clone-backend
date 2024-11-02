@@ -35,7 +35,9 @@ public class RefreshTokenService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository, JwtService jwtService) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository,
+                               UserRepository userRepository,
+                               JwtService jwtService) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
@@ -119,7 +121,9 @@ public class RefreshTokenService {
     public void verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please sign in again to obtain a new refresh token.");
+            throw new TokenRefreshException(token.getToken(),
+                    "Refresh token was expired. "
+                    + "Please sign in again to obtain a new refresh token.");
         }
 
     }
