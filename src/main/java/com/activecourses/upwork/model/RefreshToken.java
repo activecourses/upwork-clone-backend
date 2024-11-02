@@ -1,10 +1,7 @@
 package com.activecourses.upwork.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -26,6 +23,7 @@ public class RefreshToken {
     @Column(nullable = false)
     private Instant expiryDate;
 
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private User user;
