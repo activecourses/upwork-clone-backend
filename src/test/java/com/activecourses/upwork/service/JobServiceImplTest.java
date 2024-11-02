@@ -54,7 +54,6 @@ class JobServiceImplTest {
         jobDTO.setDescription("We are looking for a skilled Java developer to join our team.");
         jobDTO.setBudget(BigDecimal.valueOf(1000.00));
         jobDTO.setJobType(JobType.Hourly);
-        jobDTO.setStatus(JobStatus.Open);
 
         client = new User();
         client.setId(1); // Set a mock user ID
@@ -84,7 +83,6 @@ class JobServiceImplTest {
         assertEquals(jobDTO.getDescription(), createdJob.getDescription());
         assertEquals(jobDTO.getBudget(), createdJob.getBudget());
         assertEquals(jobDTO.getJobType(), createdJob.getJobType());
-        assertEquals(jobDTO.getStatus(), createdJob.getStatus());
         verify(jobRepository).save(any(Job.class)); // Verify save was called
     }
 
