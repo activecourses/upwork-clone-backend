@@ -25,9 +25,9 @@ public class JobController {
     private final JobMapper jobMapper;
 
     @Operation(
-        summary = "Create a new job",
-        description = "Creates a new job posting",
-        security = @SecurityRequirement(name = "bearerAuth")
+            summary = "Create a new job",
+            description = "Creates a new job posting",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     @PreAuthorize("hasRole('ADMIN') or hasRole('CLIENT') or hasRole('FREELANCER')")
     @PostMapping("/post")
@@ -36,7 +36,8 @@ public class JobController {
         return buildResponseEntity(HttpStatus.CREATED, true, jobMapper.mapTo(createdJob), null);
     }
 
-    private ResponseEntity<ResponseDto> buildResponseEntity(HttpStatus status, boolean success, Object data, Object error) {
+    private ResponseEntity<ResponseDto> buildResponseEntity(
+            HttpStatus status, boolean success, Object data, Object error) {
         return ResponseEntity
                 .status(status)
                 .body(ResponseDto
