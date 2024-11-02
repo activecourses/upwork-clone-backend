@@ -1,10 +1,7 @@
 package com.activecourses.upwork.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -28,9 +25,9 @@ public class UserProfile {
     @Column(precision = 19, scale = 2) // Example precision and scale
     private BigDecimal hourlyRate;
 
-
     private String location;
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
