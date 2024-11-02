@@ -10,11 +10,8 @@ import lombok.Data;
 
 @Data
 public class JobDTO {
-    private Integer jobId;
     private String title;
     private String description;
     private BigDecimal budget;
     private JobType jobType;
-    private JobStatus status;
-    private LocalDateTime createdAt;
 }
