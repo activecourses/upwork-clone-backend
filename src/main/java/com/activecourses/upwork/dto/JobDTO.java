@@ -1,9 +1,8 @@
 package com.activecourses.upwork.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Set;
 
-import com.activecourses.upwork.model.JobStatus;
 import com.activecourses.upwork.model.JobType;
 
 import lombok.Data;
@@ -14,4 +13,5 @@ public class JobDTO {
     private String description;
     private BigDecimal budget;
     private JobType jobType;
+    private Set<Integer> skillIds;
 }
