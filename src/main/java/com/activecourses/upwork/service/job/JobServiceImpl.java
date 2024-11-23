@@ -42,7 +42,7 @@ public class JobServiceImpl implements JobService {
         Set<Skill> skills = new HashSet<>();
         for (Integer skillId : jobDTO.getSkillIds()) {
             skills.add(skillRepository.findById(skillId)
-                .orElseThrow(() -> new IllegalArgumentException("Skill not found: " + skillId)));
+                    .orElseThrow(() -> new IllegalArgumentException("Skill not found: " + skillId)));
         }
         job.setSkills(skills);
 
