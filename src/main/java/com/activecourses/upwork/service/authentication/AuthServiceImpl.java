@@ -202,6 +202,17 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
+    @Override
+    public Integer getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User user = (User) userDetails;
+            return user.getId();
+        }
+        return null;
+    }
+
     static User unwrapUser(Optional<User> entity) {
         if (entity.isPresent()) {
             return entity.get();

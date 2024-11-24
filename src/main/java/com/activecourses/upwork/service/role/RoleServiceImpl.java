@@ -58,10 +58,17 @@ public class RoleServiceImpl implements RoleService {
         logger.info("Assigning roles to user with id: {}", userId);
         Optional<User> user = userRepository.findById(userId);
         User unwrappedUser = user.orElseThrow(() -> new RuntimeException("User not found: " + userId));
-        List<Role> roleList = roles.keySet().stream()
+
+        // Extract role names from the request body
+        List<String> roleNames = (List<String>) roles.get("roles");
+
+        // Fetch roles from the database
+        List<Role> roleList = roleNames.stream()
                 .map(roleName -> roleRepository.findByName(roleName)
                         .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
                 .collect(Collectors.toList());
+
+        // Assign roles to the user
         unwrappedUser.setRoles(roleList);
         userRepository.save(unwrappedUser);
         return true;

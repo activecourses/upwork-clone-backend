@@ -23,4 +23,6 @@ public interface AuthService {
     boolean deactivateUser(int userId);
 
     boolean reactivateUser(int userId);
+
+    Integer getCurrentUserId();
 }
